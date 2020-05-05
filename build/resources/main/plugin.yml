@@ -1,0 +1,5 @@
+name: Spellcast
+version: 1.0.0
+main: fr.commentary.spellcast.Spellcast
+api-version: 1.13
+authors: [Commentary]
