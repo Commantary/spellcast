@@ -22,14 +22,12 @@ import static java.lang.Math.sin;
 
 public class Wingardium {
 
-    private Spellcast main;
     private PlayerInteractEvent event;
     private Player player;
     private double t = 0;
     private double r = 1;
 
-    public Wingardium(Spellcast main, PlayerInteractEvent event, Player player) {
-        this.main = main;
+    public Wingardium(PlayerInteractEvent event, Player player) {
         this.event = event;
         this.player = player;
     }
@@ -49,8 +47,9 @@ public class Wingardium {
                 player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, loc, 0);
                 for (Entity e : loc.getChunk().getEntities()) {
                     if (e.getLocation().distance(loc) < 2.0 && !e.equals(player)){
-                        CustomBat customBat = new CustomBat(EntityTypes.BAT , loc, main);
+                        CustomBat customBat = new CustomBat(EntityTypes.BAT , e.getLocation());
                         ((CraftWorld)loc.getWorld()).getHandle().addEntity(customBat, CreatureSpawnEvent.SpawnReason.CUSTOM);
+                        customBat.setPosition(e.getLocation().getX(), e.getLocation().getY()+1, e.getLocation().getZ());
                         customBat.getBukkitEntity().addPassenger(e);
                         e.setInvulnerable(true);
                         destroyBat(customBat, e);
@@ -67,7 +66,7 @@ public class Wingardium {
 
     public void destroyBat(CustomBat customBat, Entity entity){
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(main, new Runnable() {
+        scheduler.scheduleSyncDelayedTask(Spellcast.getInstance(), new Runnable() {
             @Override
             public void run() {
                 customBat.killEntity();
@@ -85,7 +84,6 @@ public class Wingardium {
                 if(customBat.isAlive()){
                     Location loc = entity.getLocation();
                     t += Math.PI/8;
-                    player.sendMessage(String.valueOf(t));
                     double x = r*cos(t);
                     double y = 0;
                     double z = r*sin(t);
@@ -96,7 +94,7 @@ public class Wingardium {
                     loc.subtract(x,1,z);
                 }
             }
-        }.runTaskTimer(main, 0, 1);
+        }.runTaskTimer(Spellcast.getInstance(), 0, 1);
     }
 
 }
