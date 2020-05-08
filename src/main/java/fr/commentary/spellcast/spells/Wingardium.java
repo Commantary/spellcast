@@ -57,7 +57,7 @@ public class Wingardium {
                         stop = true;
                     }
                 }
-                if(loc.getBlock().getType()!=Material.AIR&&loc.getBlock().getType()!=Material.GRASS&&loc.getBlock().getType()!=Material.WATER)
+                if(loc.getBlock().getType()!=Material.AIR&&loc.getBlock().getType()!=Material.GRASS&&loc.getBlock().getType()!=Material.WATER&&loc.getBlock().getType()!=Material.GRASS_BLOCK)
                     stop = true;
                 loc.subtract(x, y, z);
             }
@@ -69,6 +69,8 @@ public class Wingardium {
         scheduler.scheduleSyncDelayedTask(Spellcast.getInstance(), new Runnable() {
             @Override
             public void run() {
+                entity.leaveVehicle();
+                customBat.setPosition(entity.getLocation().getX(), 300, entity.getLocation().getZ());
                 customBat.killEntity();
                 entity.setInvulnerable(false);
             }
