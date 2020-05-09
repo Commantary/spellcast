@@ -44,7 +44,7 @@ public class Wingardium {
                 double y = dir.getY() * t + 1.5;
                 double z = dir.getZ() * t;
                 loc.add(x, y, z);
-                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, loc, 0);
+                player.getWorld().spawnParticle(Particle.CRIT, loc, 0);
                 for (Entity e : loc.getChunk().getEntities()) {
                     if (e.getLocation().distance(loc) < 2.0 && !e.equals(player)){
                         CustomBat customBat = new CustomBat(EntityTypes.BAT , e.getLocation());
@@ -74,7 +74,7 @@ public class Wingardium {
                 customBat.killEntity();
                 entity.setInvulnerable(false);
             }
-        }, 100);
+        }, 200);
     }
 
     public void particlesFly(CustomBat customBat, Entity entity){

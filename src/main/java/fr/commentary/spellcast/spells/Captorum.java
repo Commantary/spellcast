@@ -34,7 +34,7 @@ public class Captorum {
                 double y = dir.getY() * t + 1.5;
                 double z = dir.getZ() * t;
                 loc.add(x, y, z);
-                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, loc, 0);
+                player.getWorld().spawnParticle(Particle.CRIT, loc, 0);
                 for (Entity e : loc.getChunk().getEntities()) {
                     if (e.getLocation().distance(loc) < 2.0 && e instanceof Player && !e.equals(player)) {
                         e.setFireTicks(20 * 5);

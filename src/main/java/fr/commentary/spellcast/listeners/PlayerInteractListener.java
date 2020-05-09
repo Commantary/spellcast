@@ -1,10 +1,7 @@
 package fr.commentary.spellcast.listeners;
 
 import fr.commentary.spellcast.Spellcast;
-import fr.commentary.spellcast.spells.Captorum;
-import fr.commentary.spellcast.spells.Evanesco;
-import fr.commentary.spellcast.spells.Spells;
-import fr.commentary.spellcast.spells.Wingardium;
+import fr.commentary.spellcast.spells.*;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
@@ -50,12 +47,22 @@ public class PlayerInteractListener implements Listener {
             Integer value = entry.getValue();
 
             if(key==player){
-                if(value == 0){
-                    new Captorum(event, player).useSpell();
-                } else if(value == 1){
-                    new Wingardium(event, player).useSpell();
-                } else if(value == 2){
-                    new Evanesco(event, player).useSpell();
+                switch(value){
+                    case 0:
+                        new Captorum(event, player).useSpell();
+                        break;
+                    case 1:
+                        new Wingardium(event, player).useSpell();
+                        break;
+                    case 2:
+                        new Evanesco(event, player).useSpell();
+                        break;
+                    case 3:
+                        new Imobilis(event, player).useSpell();
+                        break;
+                    case 4:
+                        new Finite(event, player).useSpell();
+                        break;
                 }
             }
         }

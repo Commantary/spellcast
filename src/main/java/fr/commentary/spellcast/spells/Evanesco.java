@@ -41,18 +41,32 @@ public class Evanesco {
                 double y = dir.getY() * t + 1.5;
                 double z = dir.getZ() * t;
                 loc.add(x, y, z);
-                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, loc, 0);
+                player.getWorld().spawnParticle(Particle.CRIT, loc, 0);
                 for (Entity e : loc.getChunk().getEntities()) {
                     if (e.getLocation().distance(loc) < 2.0 && !e.equals(player)){
                         if(e instanceof CraftItem) return;
                         if(e instanceof Player){
                             Player p = ((Player) e).getPlayer();
-                            Location location = new Location(p.getWorld(), p.getLocation().getX(), 300, p.getLocation().getZ());
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 10, false, false));
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 10, 1, false, false));
+                            Location locBack = p.getLocation();
+                            Location location = new Location(p.getWorld(), p.getLocation().getX(), 256, p.getLocation().getZ());
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 99999, 10, false, false));
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 1, false, false));
+                            player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, locBack, 0);
+                            particleCercle(e.getLocation());
+                            p.setInvulnerable(true);
+                            location.subtract(0, 1, 0);
+                            changeBlock(location, Material.BARRIER);
+                            location.add(1,1,0);
+                            changeBlock(location, Material.BARRIER);
+                            location.subtract(2,0,0);
+                            changeBlock(location, Material.BARRIER);
+                            location.add(1,0,1);
+                            changeBlock(location, Material.BARRIER);
+                            location.subtract(0,0,2);
+                            changeBlock(location, Material.BARRIER);
+                            location.add(0,0,1);
                             p.teleport(location);
-                            location.subtract(0,1,0);
-                            location.getBlock().setType(Material.BARRIER);
+                            respawnPlayer(locBack, p, location);
                             stop = true;
                         } else {
                             Location location = new Location(e.getWorld(), e.getLocation().getX(), 300, e.getLocation().getZ());
@@ -98,6 +112,64 @@ public class Evanesco {
                 location.subtract(x,2,z);
             }
         }.runTaskTimer(Spellcast.getInstance(), 0, 1);
+    }
+    public void particleBack(Location location){
+        t = 0;
+        r = 1;
+        x = 0;
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                x +=1;
+                if(x==20){
+                    cancel();
+                }
+                t += Math.PI/8;
+                double x = r*cos(t);
+                double y = 0;
+                double z = r*sin(t);
+                location.add(x,y,z);
+                location.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, location, 0);
+                location.add(0, .5, 0);
+                location.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, location, 0);
+                location.add(0, .5, 0);
+                location.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, location, 0);
+                location.add(0, .5, 0);
+                location.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, location, 0);
+                location.add(0, .5, 0);
+                location.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, location, 0);
+                location.subtract(x,2,z);
+            }
+        }.runTaskTimer(Spellcast.getInstance(), 0, 1);
+    }
+
+    public void changeBlock(Location location, Material material){
+        location.getBlock().setType(material);
+        location.getBlock().getState().update();
+    }
+
+    public void respawnPlayer(Location locBack, Player player, Location oldBlock){
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                player.teleport(locBack);
+                player.setInvulnerable(false);
+                player.removePotionEffect(PotionEffectType.BLINDNESS);
+                player.removePotionEffect(PotionEffectType.INVISIBILITY);
+                oldBlock.subtract(0, 1, 0);
+                changeBlock(oldBlock, Material.BARRIER);
+                oldBlock.add(1,1,0);
+                changeBlock(oldBlock, Material.BARRIER);
+                oldBlock.subtract(2,0,0);
+                changeBlock(oldBlock, Material.BARRIER);
+                oldBlock.add(1,0,1);
+                changeBlock(oldBlock, Material.BARRIER);
+                oldBlock.subtract(0,0,2);
+                changeBlock(oldBlock, Material.BARRIER);
+                oldBlock.add(0,0,1);
+                particleBack(locBack);
+            }
+        }.runTaskLater(Spellcast.getInstance(), 140L);
     }
 
 }

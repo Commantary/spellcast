@@ -11,7 +11,8 @@ public class QuitListener implements Listener {
     @EventHandler
     public void onJoin(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-        Spellcast.getInstance().getSpellsPlayer().remove(player);
+        Spellcast.getInstance().spellsPlayer.remove(player);
+        Spellcast.getInstance().playerStats.remove(Spellcast.getInstance().getPlayerstatsFromUuid(player.getUniqueId()));
     }
 
 }

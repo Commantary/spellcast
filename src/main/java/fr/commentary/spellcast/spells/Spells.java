@@ -8,10 +8,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum Spells {
-
+    //mobilicorpus
     CAPTORUM(0, ChatColor.GOLD+"1. Captorum"),
     WINGARDIUM_LEVIOSA(1, ChatColor.LIGHT_PURPLE+"2. Wingardium leviosa"),
-    EVANESCO(2, ChatColor.RED+"3. Evanesco");
+    EVANESCO(2, ChatColor.RED+"3. Evanesco"),
+    IMOBILIS(3, ChatColor.AQUA+"4. Imobilis"),
+    FINITE(4, ChatColor.DARK_AQUA+"5. Finite");
 
     private final int value;
     private final String name;

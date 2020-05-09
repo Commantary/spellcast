@@ -1,6 +1,7 @@
 package fr.commentary.spellcast.listeners;
 
 import fr.commentary.spellcast.Spellcast;
+import fr.commentary.spellcast.classes.PlayerStats;
 import fr.commentary.spellcast.spells.Spells;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -11,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class JoinListener implements Listener {
@@ -19,6 +21,7 @@ public class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         Spellcast.getInstance().spellsPlayer.put(player, Spells.CAPTORUM.getValue());
+        Spellcast.getInstance().playerStats.add(new PlayerStats(new ArrayList<>(), player.getUniqueId(), player.getDisplayName()));
 
         new BukkitRunnable(){
             @Override
@@ -29,7 +32,6 @@ public class JoinListener implements Listener {
                     for(Map.Entry<Player, Integer> entry : Spellcast.getInstance().spellsPlayer.entrySet()) {
                         Player key = entry.getKey();
                         Integer value = entry.getValue();
-
                         if(key==player){
                             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Spells.fromValue(value).getName()));
                         }
